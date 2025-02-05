@@ -1,3 +1,34 @@
+# Gilded Rose - JavaScript (Jest)
+---
+
+*This project is based on the original Gilded Rose Kata repository.*
+
+---
+## SWE-6733 | Spring (2025)
+## Team 1 - Contributors
+
+- **Connor Bland**
+- **Steve Lane**
+- **Masom Hamadeh**
+- **Erica Ransom**
+- **Baileigh Brown**
+
+## Collaboration & Remote Pair/Mob Programming
+
+To ensure **effective real-time collaboration**, our team has chosen the following tools:
+
+- **Discord**: Our primary tool for voice communication, screen sharing, and real-time discussions. It provides a lightweight and flexible environment for both pair programming and full-team mob programming.
+- **Microsoft Teams**: Used for structured meetings, documentation sharing, and persistent threaded discussions. Teams also helps with scheduled check-ins and formal progress tracking.
+
+### **Rationale for Our Choices**
+1. **Discord** allows for **quick, informal communication** and is well-suited for coding sessions where screen sharing is essential.
+2. **Microsoft Teams** provides **structured communication** and document management, which is useful for project tracking and asynchronous discussions.
+3. Combining these two tools ensures a **balanced workflow** that supports **real-time problem-solving (Discord)** while keeping project documentation and discussions **organized and accessible (Teams).**
+---
+## Below information is taken straight from official/original Gilded Rose Kata repo found
+https://github.com/emilybache/GildedRose-Refactoring-Kata
+---
+---
 # Gilded Rose in Javascript with Jest
 
 ## Getting started
