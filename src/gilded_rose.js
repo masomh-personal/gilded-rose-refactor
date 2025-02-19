@@ -9,6 +9,7 @@ class Item {
 class Shop {
   #items;
 
+  // Constants for named items to avoid magic strings
   NAMED_ITEMS = {
     BRIE: 'Aged Brie',
     SULFURAS: 'Sulfuras, Hand of Ragnaros',
@@ -25,78 +26,48 @@ class Shop {
 
   updateQuality() {
     for (const item of this.#items) {
-      // Guard clause: Sulfuras - no update/changes required
-      // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
+      // Legendary item: Sulfuras - does not change
       if (item.name === this.NAMED_ITEMS.SULFURAS) continue;
 
+      // Determine degradation rate (doubles when sell-in is 0 or below)
       const degradationRate = item.sellIn <= 0 ? 2 : 1;
 
-      // Process item based on name/type
+      // Process item based on type
       if (item.name === this.NAMED_ITEMS.BRIE || item.name === this.NAMED_ITEMS.BACKSTAGE) {
-        // if it's a named item (brie or backstage)
         this.#processSpecialItem(item, degradationRate);
       } else if (item.name.startsWith('Normal')) {
-        // Any normal items
-        this.#processNormalItem(item, degradationRate);
+        this.#decreaseQuality(item, degradationRate);
       } else {
-        // NOTE: we are going to assume these are the only types of items and not having any validation
-        // Any conjured items
-        this.#processConjuredItem(item, degradationRate);
+        // Assumes all other items are Conjured (per problem statement)
+        this.#decreaseQuality(item, degradationRate * 2);
       }
 
-      // decrement sellIn for all items after their specific qualities are updated
+      // Decrement sellIn after processing quality
       item.sellIn--;
     }
 
     return this.#items;
   }
 
-  // PRIVATE HELPER METHODS
+  // Handles Aged Brie & Backstage Passes logic
   #processSpecialItem(item, degradationRate) {
-    // process Aged Brie or Backstage Passes
     if (item.name === this.NAMED_ITEMS.BRIE) {
-      // 'Aged Brie'
+      // "Aged Brie" increases in quality over time
       item.quality = Math.min(50, item.quality + degradationRate);
     } else {
-      // 'Backstage Passes"
-      let backstageQualityRate = 0;
+      // "Backstage Passes" increase at different rates and drop to 0 after expiration
       if (item.sellIn <= 0) {
         item.quality = 0;
-        return;
-      } else if (item.sellIn <= 5) {
-        backstageQualityRate = 3;
-      } else if (item.sellIn <= 10) {
-        backstageQualityRate = 2;
       } else {
-        backstageQualityRate = 1;
+        const backstageQualityRate = item.sellIn <= 5 ? 3 : item.sellIn <= 10 ? 2 : 1;
+        item.quality = Math.min(50, item.quality + backstageQualityRate);
       }
-
-      item.quality = item.quality === 50 ? 50 : item.quality + backstageQualityRate;
     }
   }
 
-  #processNormalItem(item, degradationRate) {
-    const newQuality = item.quality - degradationRate;
-
-    if (newQuality > 50) {
-      item.quality = 50;
-    } else if (newQuality < 0) {
-      item.quality = 0;
-    } else {
-      item.quality = newQuality;
-    }
-  }
-
-  #processConjuredItem(item, degradationRate) {
-    const newQuality = item.quality - degradationRate * 2;
-
-    if (newQuality > 50) {
-      item.quality = 50;
-    } else if (newQuality < 0) {
-      item.quality = 0;
-    } else {
-      item.quality = newQuality;
-    }
+  // Generic quality reduction logic (used by Normal & Conjured items)
+  #decreaseQuality(item, rate) {
+    item.quality = Math.max(0, Math.min(50, item.quality - rate));
   }
 }
 
