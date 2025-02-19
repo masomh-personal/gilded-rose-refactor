@@ -1,5 +1,3 @@
-// TODO: Task #5 - Remove "Code Smells" and refactor code
-// NOTE: Code Smells is a hint that something might be wrong, not a certainty. Good design?
 class Item {
   constructor(name, sellIn, quality) {
     this.name = name;
