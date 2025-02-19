@@ -31,58 +31,21 @@ class Shop {
       // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
       if (item.name === this.NAMED_ITEMS.SULFURAS) continue;
 
+      item.sellIn -= 1;
+      const qualityRate = item.sellIn < 0 ? 2 : 1;
+      const specialItems = [this.NAMED_ITEMS.BRIE, this.NAMED_ITEMS.BACKSTAGE];
+
       // Process item based on name/type
-      if (item in this.NAMED_ITEMS) {
+      if (specialItems.includes(item.name)) {
         // if it's a named item (brie or backstage)
-        this.#processNamedItems(item);
+        this.#processNamedItems(item, qualityRate);
       } else if (item.name.startsWith('Normal')) {
         // Any normal items
-        this.#processNormalItem(item);
+        this.#processNormalItem(item, qualityRate);
       } else {
         // NOTE: we are going to assume these are the only types of items and not having any validation
         // Any conjured items
-        this.#processConjuredItem(item);
-      }
-
-      // ====================================================================================
-      if (item.name !== 'Aged Brie' && item.name !== 'Backstage passes to a TAFKAL80ETC concert') {
-        if (item.quality > 0) {
-          item.quality = item.quality - 1;
-        }
-      } else {
-        if (item.quality < 50) {
-          item.quality = item.quality + 1;
-          if (item.name === 'Backstage passes to a TAFKAL80ETC concert') {
-            if (item.sellIn < 11) {
-              if (item.quality < 50) {
-                item.quality = item.quality + 1;
-              }
-            }
-            if (item.sellIn < 6) {
-              if (item.quality < 50) {
-                item.quality = item.quality + 1;
-              }
-            }
-          }
-        }
-      }
-
-      item.sellIn = item.sellIn - 1;
-
-      if (item.sellIn < 0) {
-        if (item.name !== 'Aged Brie') {
-          if (item.name !== 'Backstage passes to a TAFKAL80ETC concert') {
-            if (item.quality > 0) {
-              item.quality = item.quality - 1;
-            }
-          } else {
-            item.quality = item.quality - item.quality;
-          }
-        } else {
-          if (item.quality < 50) {
-            item.quality = item.quality + 1;
-          }
-        }
+        this.#processConjuredItem(item, qualityRate);
       }
     }
 
@@ -90,14 +53,20 @@ class Shop {
   }
 
   // PRIVATE HELPER METHODS
-  #processNamedItems(item) {
+  #processNamedItems(item, qualityRate) {
     // process Aged Brie or Backstage Passes
+    if (item.name === this.NAMED_ITEMS.BRIE) {
+      // 'Aged Brie'
+      item.quality = item.quality === 50 ? 50 : item.quality + qualityRate;
+    } else {
+      // 'Backstage Passes"
+    }
   }
-  #processNormalItem(item) {
+  #processNormalItem(item, qualityRate) {
     // process 'Normal' items
   }
 
-  #processConjuredItem(item) {
+  #processConjuredItem(item, qualityRate) {
     // process 'Conjured' items
   }
 }
