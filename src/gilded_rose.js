@@ -31,43 +31,75 @@ class Shop {
       // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
       if (item.name === this.NAMED_ITEMS.SULFURAS) continue;
 
-      item.sellIn -= 1;
-      const qualityRate = item.sellIn < 0 ? 2 : 1;
+      const degradationRate = item.sellIn <= 0 ? 2 : 1;
       const specialItems = [this.NAMED_ITEMS.BRIE, this.NAMED_ITEMS.BACKSTAGE];
 
       // Process item based on name/type
       if (specialItems.includes(item.name)) {
         // if it's a named item (brie or backstage)
-        this.#processNamedItems(item, qualityRate);
+        this.#processSpecialItem(item, degradationRate);
       } else if (item.name.startsWith('Normal')) {
         // Any normal items
-        this.#processNormalItem(item, qualityRate);
+        this.#processNormalItem(item, degradationRate);
       } else {
         // NOTE: we are going to assume these are the only types of items and not having any validation
         // Any conjured items
-        this.#processConjuredItem(item, qualityRate);
+        this.#processConjuredItem(item, degradationRate);
       }
+
+      // decrement sellIn for all items after their specific qualities are updated
+      item.sellIn--;
     }
 
     return this.#items;
   }
 
   // PRIVATE HELPER METHODS
-  #processNamedItems(item, qualityRate) {
+  #processSpecialItem(item, degradationRate) {
     // process Aged Brie or Backstage Passes
     if (item.name === this.NAMED_ITEMS.BRIE) {
       // 'Aged Brie'
-      item.quality = item.quality === 50 ? 50 : item.quality + qualityRate;
+      item.quality = item.quality === 50 ? 50 : item.quality + degradationRate;
     } else {
       // 'Backstage Passes"
+      let backstageQualityRate = 0;
+      if (item.sellIn <= 0) {
+        item.quality = 0;
+        return;
+      } else if (item.sellIn <= 5) {
+        backstageQualityRate = 3;
+      } else if (item.sellIn <= 10) {
+        backstageQualityRate = 2;
+      } else {
+        backstageQualityRate = 1;
+      }
+
+      item.quality = item.quality === 50 ? 50 : item.quality + backstageQualityRate;
     }
   }
-  #processNormalItem(item, qualityRate) {
-    // process 'Normal' items
+
+  #processNormalItem(item, degradationRate) {
+    const newQuality = item.quality - degradationRate;
+
+    if (newQuality > 50) {
+      item.quality = 50;
+    } else if (newQuality < 0) {
+      item.quality = 0;
+    } else {
+      item.quality = newQuality;
+    }
   }
 
-  #processConjuredItem(item, qualityRate) {
-    // process 'Conjured' items
+  #processConjuredItem(item, degradationRate) {
+    const newQuality = item.quality - degradationRate * 2;
+
+    if (newQuality > 50) {
+      item.quality = 50;
+    } else if (newQuality < 0) {
+      item.quality = 0;
+    } else {
+      item.quality = newQuality;
+    }
   }
 }
 
