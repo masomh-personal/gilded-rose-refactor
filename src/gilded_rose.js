@@ -22,18 +22,19 @@ class Shop {
 
   updateQuality() {
     for (const item of this.#items) {
+      const { name, sellIn } = item;
       // Legendary item: Sulfuras - does not change
-      if (item.name === this.NAMED_ITEMS.SULFURAS) continue;
+      if (name === this.NAMED_ITEMS.SULFURAS) continue;
 
       // Determine degradation rate (doubles when sell-in is 0 or below)
-      const degradationRate = item.sellIn <= 0 ? 2 : 1;
+      const degradationRate = sellIn <= 0 ? 2 : 1;
 
       // Process item based on type
-      if (item.name === this.NAMED_ITEMS.BRIE || item.name === this.NAMED_ITEMS.BACKSTAGE) {
+      if (name === this.NAMED_ITEMS.BRIE || name === this.NAMED_ITEMS.BACKSTAGE) {
         this.#processSpecialItem(item, degradationRate);
-      } else if (item.name.startsWith('Normal')) {
+      } else if (name.startsWith('Normal')) {
         this.#decreaseQuality(item, degradationRate);
-      } else if (item.name.startsWith('Conjured')) {
+      } else if (name.startsWith('Conjured')) {
         this.#decreaseQuality(item, degradationRate * 2);
       } else {
         // ⚠️ WARNING: Any unknown item will be treated as "Conjured".
