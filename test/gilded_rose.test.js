@@ -149,4 +149,40 @@ describe('Gilded Rose', () => {
       expect(updatedItem.quality).toBe(expectedQuality);
     });
   });
+
+  describe('Unknown Items (treated as Conjured)', () => {
+    test.each([
+      {
+        name: 'Mystic Orb',
+        sellIn: 10,
+        quality: 10,
+        expectedSellIn: 9,
+        expectedQuality: 8,
+        description: 'decreases quality twice as fast before sell-in expires',
+      },
+      {
+        name: 'Ancient Relic',
+        sellIn: 0,
+        quality: 10,
+        expectedSellIn: -1,
+        expectedQuality: 6,
+        description: 'decreases quality twice as fast after sell-in expires',
+      },
+      {
+        name: 'Forgotten Artifact',
+        sellIn: 5,
+        quality: 0,
+        expectedSellIn: 4,
+        expectedQuality: 0,
+        description: 'does not decrease quality below 0',
+      },
+    ])('$description', ({ name, sellIn, quality, expectedSellIn, expectedQuality }) => {
+      const newItem = new Item(name, sellIn, quality);
+      shop = new Shop([newItem]);
+      const [updatedItem] = shop.updateQuality();
+
+      expect(updatedItem.sellIn).toBe(expectedSellIn);
+      expect(updatedItem.quality).toBe(expectedQuality);
+    });
+  });
 });
