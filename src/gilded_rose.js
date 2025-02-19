@@ -30,10 +30,9 @@ class Shop {
       if (item.name === this.NAMED_ITEMS.SULFURAS) continue;
 
       const degradationRate = item.sellIn <= 0 ? 2 : 1;
-      const specialItems = [this.NAMED_ITEMS.BRIE, this.NAMED_ITEMS.BACKSTAGE];
 
       // Process item based on name/type
-      if (specialItems.includes(item.name)) {
+      if (item.name === this.NAMED_ITEMS.BRIE || item.name === this.NAMED_ITEMS.BACKSTAGE) {
         // if it's a named item (brie or backstage)
         this.#processSpecialItem(item, degradationRate);
       } else if (item.name.startsWith('Normal')) {
