@@ -33,8 +33,11 @@ class Shop {
         this.#processSpecialItem(item, degradationRate);
       } else if (item.name.startsWith('Normal')) {
         this.#decreaseQuality(item, degradationRate);
+      } else if (item.name.startsWith('Conjured')) {
+        this.#decreaseQuality(item, degradationRate * 2);
       } else {
-        // Assumes all other items are Conjured (per problem statement)
+        // ⚠️ WARNING: Any unknown item will be treated as "Conjured".
+        // If new item types are introduced, update this logic to avoid miss classification.
         this.#decreaseQuality(item, degradationRate * 2);
       }
 
