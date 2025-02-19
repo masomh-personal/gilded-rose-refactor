@@ -20,10 +20,6 @@ class Shop {
     this.#items = items;
   }
 
-  get items() {
-    return this.#items;
-  }
-
   updateQuality() {
     for (const item of this.#items) {
       // Legendary item: Sulfuras - does not change
