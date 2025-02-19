@@ -1,5 +1,5 @@
 const { Shop, Item } = require('../src/gilded_rose');
-const { describe, it, expect, beforeEach } = require('@jest/globals');
+const { describe, it, expect, beforeEach, test } = require('@jest/globals');
 
 const NAMED_ITEMS = {
   BRIE: 'Aged Brie',
@@ -81,53 +81,72 @@ describe('Gilded Rose', () => {
   });
 
   describe('Normal Items', () => {
-    it('should decrease sellIn and quality by 1 each day', () => {
-      const newItem = new Item(NAMED_ITEMS.NORMAL, 10, 20);
+    test.each([
+      {
+        name: NAMED_ITEMS.NORMAL,
+        sellIn: 10,
+        quality: 20,
+        expectedSellIn: 9,
+        expectedQuality: 19,
+        description: 'decreases sellIn and quality by 1 each day',
+      },
+      {
+        name: NAMED_ITEMS.NORMAL,
+        sellIn: 0,
+        quality: 10,
+        expectedSellIn: -1,
+        expectedQuality: 8,
+        description: 'decreases quality twice as fast when sellIn reaches 0',
+      },
+      {
+        name: NAMED_ITEMS.NORMAL,
+        sellIn: 5,
+        quality: 0,
+        expectedSellIn: 4,
+        expectedQuality: 0,
+        description: 'does not decrease quality below 0',
+      },
+    ])('$description', ({ name, sellIn, quality, expectedSellIn, expectedQuality }) => {
+      const newItem = new Item(name, sellIn, quality);
       shop = new Shop([newItem]);
       const [updatedItem] = shop.updateQuality();
-      expect(updatedItem.sellIn).toBe(9);
-      expect(updatedItem.quality).toBe(19);
-    });
-
-    it('should degrade quality twice as fast after sellIn reaches 0', () => {
-      const newItem = new Item(NAMED_ITEMS.NORMAL, 0, 10);
-      shop = new Shop([newItem]);
-      const [updatedItem] = shop.updateQuality();
-      expect(updatedItem.sellIn).toBe(-1);
-      expect(updatedItem.quality).toBe(8);
-    });
-
-    it('should never decrease quality below 0', () => {
-      const newItem = new Item(NAMED_ITEMS.NORMAL, 5, 0);
-      shop = new Shop([newItem]);
-      const [updatedItem] = shop.updateQuality();
-      expect(updatedItem.quality).toBe(0);
+      expect(updatedItem.sellIn).toBe(expectedSellIn);
+      expect(updatedItem.quality).toBe(expectedQuality);
     });
   });
 
   describe('Conjured Items', () => {
-    it('should decrease quality twice as fast before sell-in expires (decrement by 2)', () => {
-      const newItem = new Item(NAMED_ITEMS.CONJURED, 10, 10);
+    test.each([
+      {
+        name: NAMED_ITEMS.CONJURED,
+        sellIn: 10,
+        quality: 10,
+        expectedSellIn: 9,
+        expectedQuality: 8,
+        description: 'decreases quality twice as fast before sell-in expires (decrement by 2)',
+      },
+      {
+        name: NAMED_ITEMS.CONJURED,
+        sellIn: 0,
+        quality: 10,
+        expectedSellIn: -1,
+        expectedQuality: 6,
+        description: 'decreases quality twice as fast after sell-in expires (decrement by 4)',
+      },
+      {
+        name: NAMED_ITEMS.CONJURED,
+        sellIn: 5,
+        quality: 0,
+        expectedSellIn: 4,
+        expectedQuality: 0,
+        description: 'does not decrease quality below 0',
+      },
+    ])('$description', ({ name, sellIn, quality, expectedSellIn, expectedQuality }) => {
+      const newItem = new Item(name, sellIn, quality);
       shop = new Shop([newItem]);
       const [updatedItem] = shop.updateQuality();
-      expect(updatedItem.sellIn).toBe(9);
-      expect(updatedItem.quality).toBe(8);
-    });
-
-    it('should decrease quality twice as fast after sell-in expires (decrement by 4)', () => {
-      const newItem = new Item(NAMED_ITEMS.CONJURED, 0, 10);
-      shop = new Shop([newItem]);
-      const [updatedItem] = shop.updateQuality();
-      expect(updatedItem.sellIn).toBe(-1);
-      expect(updatedItem.quality).toBe(6);
-    });
-
-    it('should not decrease quality below 0', () => {
-      const newItem = new Item(NAMED_ITEMS.CONJURED, 5, 0);
-      shop = new Shop([newItem]);
-      const [updatedItem] = shop.updateQuality();
-      expect(updatedItem.sellIn).toBe(4);
-      expect(updatedItem.quality).toBe(0);
+      expect(updatedItem.sellIn).toBe(expectedSellIn);
+      expect(updatedItem.quality).toBe(expectedQuality);
     });
   });
 });
