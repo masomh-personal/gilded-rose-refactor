@@ -56,7 +56,7 @@ class Shop {
     // process Aged Brie or Backstage Passes
     if (item.name === this.NAMED_ITEMS.BRIE) {
       // 'Aged Brie'
-      item.quality = item.quality === 50 ? 50 : item.quality + degradationRate;
+      item.quality = Math.min(50, item.quality + degradationRate);
     } else {
       // 'Backstage Passes"
       let backstageQualityRate = 0;
