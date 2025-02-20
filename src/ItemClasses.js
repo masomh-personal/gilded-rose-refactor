@@ -1,4 +1,4 @@
-// Base Item class (can't change per rules)
+// NOTE: Base Item class (can't change per rules)
 class Item {
   constructor(name, sellIn, quality) {
     this.name = name;
@@ -9,8 +9,7 @@ class Item {
 
 // NOTE: Implementing Strategy Behavioral Design Pattern
 // It promotes composition over inheritance, enabling you to select the algorithm at runtime
-
-// Strategy "Interface"
+// Strategy "Abstract" Class
 class ItemStrategy {
   /**
    * Abstract method to be implemented in subclasses
@@ -22,7 +21,6 @@ class ItemStrategy {
   }
 }
 
-// Normal Item Strategy
 class NormalItemStrategy extends ItemStrategy {
   update(item) {
     const degradationRate = item.sellIn <= 0 ? 2 : 1;
@@ -31,7 +29,6 @@ class NormalItemStrategy extends ItemStrategy {
   }
 }
 
-// Aged Brie Strategy
 class AgedBrieStrategy extends ItemStrategy {
   update(item) {
     const increaseRate = item.sellIn <= 0 ? 2 : 1;
@@ -40,7 +37,6 @@ class AgedBrieStrategy extends ItemStrategy {
   }
 }
 
-// Backstage Pass Strategy
 class BackstagePassStrategy extends ItemStrategy {
   update(item) {
     if (item.sellIn <= 0) {
@@ -56,7 +52,6 @@ class BackstagePassStrategy extends ItemStrategy {
   }
 }
 
-// Conjured Item Strategy
 class ConjuredItemStrategy extends ItemStrategy {
   update(item) {
     const degradationRate = item.sellIn <= 0 ? 4 : 2;
@@ -65,14 +60,13 @@ class ConjuredItemStrategy extends ItemStrategy {
   }
 }
 
-// Sulfuras Strategy (Legendary Item)
 class SulfurasStrategy extends ItemStrategy {
   update(item) {
     // Sulfuras does not change quality or sellIn
+    // Future proof if logic ever needs to be added
   }
 }
 
-// Unknown Item Strategy
 class UnknownItemStrategy extends ItemStrategy {
   update(item) {
     const degradationRate = item.sellIn <= 0 ? 4 : 2;
@@ -81,7 +75,6 @@ class UnknownItemStrategy extends ItemStrategy {
   }
 }
 
-// Export all classes
 module.exports = {
   Item,
   NormalItemStrategy,

@@ -1,5 +1,4 @@
 const {
-  Item,
   NormalItemStrategy,
   AgedBrieStrategy,
   BackstagePassStrategy,
@@ -10,13 +9,6 @@ const {
 
 class Shop {
   #items;
-
-  // Constants for named items to avoid magic strings
-  NAMED_ITEMS = {
-    BRIE: 'Aged Brie',
-    SULFURAS: 'Sulfuras, Hand of Ragnaros',
-    BACKSTAGE: 'Backstage passes to a TAFKAL80ETC concert',
-  };
 
   constructor(items = []) {
     this.#items = items;
