@@ -1,4 +1,5 @@
-const { Shop, Item } = require('../src/gilded_rose');
+const { Shop } = require('../src/gilded_rose');
+const { Item } = require('../src/ItemClasses');
 const { describe, it, expect, beforeEach, test } = require('@jest/globals');
 
 const NAMED_ITEMS = {
