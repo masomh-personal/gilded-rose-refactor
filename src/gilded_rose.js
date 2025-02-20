@@ -14,6 +14,10 @@ class Shop {
     this.#items = items;
   }
 
+  get items() {
+    return this.#items;
+  }
+
   updateQuality() {
     for (const item of this.#items) {
       const strategy = this.#getStrategy(item);

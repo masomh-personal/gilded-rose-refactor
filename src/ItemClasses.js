@@ -77,6 +77,7 @@ class UnknownItemStrategy extends ItemStrategy {
 
 module.exports = {
   Item,
+  ItemStrategy,
   NormalItemStrategy,
   AgedBrieStrategy,
   BackstagePassStrategy,

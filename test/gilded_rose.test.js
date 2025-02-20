@@ -1,5 +1,5 @@
 const { Shop } = require('../src/gilded_rose');
-const { Item } = require('../src/ItemClasses');
+const { Item, ItemStrategy } = require('../src/ItemClasses');
 const { describe, it, expect } = require('@jest/globals');
 
 const NAMED_ITEMS = {
@@ -147,6 +147,34 @@ describe('Gilded Rose', () => {
       const shop = new Shop([item]);
       const [updatedItem] = shop.updateQuality();
       expect(updatedItem.quality).toBe(0);
+    });
+  });
+
+  describe('ItemStrategy (Abstract Class)', () => {
+    it('should throw an error if update() is not implemented in a subclass', () => {
+      const item = new Item('Generic Item', 5, 10);
+      const strategy = new ItemStrategy();
+
+      expect(() => strategy.update(item)).toThrowError(
+        'update() must be implemented in subclasses'
+      );
+    });
+  });
+
+  describe('Shop Class Instantiation', () => {
+    it('should initialize with an array of items', () => {
+      const item = new Item('Forgotten Artifact', 5, 0);
+      const shop = new Shop([item]);
+
+      // Directly check that shop.items contains the item
+      expect(shop.items).toEqual([item]);
+    });
+
+    it('should initialize with an empty array if no items are provided', () => {
+      const shop = new Shop();
+
+      // Verify that items is initialized as an empty array
+      expect(shop.items).toEqual([]);
     });
   });
 });
