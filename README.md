@@ -1,6 +1,6 @@
 # Gilded Rose - JavaScript (Jest)
 
-*This project is based on the original Gilded Rose Kata repository.*
+*Our group [project](https://github.com/masomh-personal/gilded-rose-refactor) is based on the original Gilded Rose Kata repository.*
 
 ---
 ## SWE-6733 | Spring (2025)
